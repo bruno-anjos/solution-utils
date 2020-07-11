@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/bruno-anjos/edge-deployment-utils/http_utils"
+	"github.com/bruno-anjos/solution-utils/http_utils"
 	log "github.com/sirupsen/logrus"
 )
 

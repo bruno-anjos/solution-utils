@@ -4,18 +4,10 @@ import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	log "github.com/sirupsen/logrus"
 )
 
 const (
-	// Get http GET method string
-	Get = "GET"
-
-	// Post http POST method string
-	Post = "POST"
-
-	// Delete http DELETE method string
-	Delete = "DELETE"
-
 	// PathVarFormat format string to add vars to path
 	PathVarFormat = "{%s}"
 )
@@ -26,16 +18,28 @@ type Route struct {
 	Name        string
 	Method      string
 	Pattern     string
+	QueryParams []string
 	HandlerFunc http.HandlerFunc
 }
 
-func NewRouter(routes []Route) *mux.Router {
-	router := mux.NewRouter().StrictSlash(true)
+// NewRouter Creates new router with prefix and handlers for routes specified
+func NewRouter(prefix string, routes []Route) (r *mux.Router) {
+	r = mux.NewRouter().StrictSlash(true)
+	s := r.PathPrefix(prefix).Subrouter()
 	for _, route := range routes {
-		router.HandleFunc(route.Pattern, route.HandlerFunc).
-			Methods(route.Method).
-			Name(route.Name)
+		if len(route.QueryParams) > 0 {
+			log.Debugf("registering route for %s with query params", route.Pattern)
+			s.HandleFunc(route.Pattern, route.HandlerFunc).
+				Methods(route.Method).
+				Queries(route.QueryParams...).
+				Name(route.Name)
+		} else {
+			log.Debugf("registering route for %s", route.Pattern)
+			s.HandleFunc(route.Pattern, route.HandlerFunc).
+				Methods(route.Method).
+				Name(route.Name)
+		}
 	}
 
-	return router
+	return
 }

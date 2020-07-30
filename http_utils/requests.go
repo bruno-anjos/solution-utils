@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/gorilla/mux"
 	"github.com/pkg/errors"
 	log "github.com/sirupsen/logrus"
 )
@@ -64,4 +65,25 @@ func DoRequest(httpClient *http.Client, request *http.Request, responseBody inte
 	}
 
 	return resp.StatusCode, resp
+}
+
+func DecodeJSONRequestBody(r *http.Request, body interface{}) {
+	err := json.NewDecoder(r.Body).Decode(&body)
+	if err != nil {
+		panic(errors.WithStack(err))
+	}
+}
+
+func ExtractPathVar(r *http.Request, varName string) (varValue string) {
+	vars := mux.Vars(r)
+
+	var ok bool
+	varValue, ok = vars[varName]
+
+	if !ok {
+		err := errors.Errorf("var %s was not in request path", varName)
+		panic(errors.WithStack(err))
+	}
+
+	return
 }

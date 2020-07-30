@@ -17,10 +17,10 @@ const (
 
 // StartServer seeds the random generator and starts a server on the
 // specified host and port serving the routes passed.
-func StartServer(serviceName, host string, port int, routes []http_utils.Route) {
+func StartServer(serviceName, host string, port int, prefixPath string, routes []http_utils.Route) {
 	rand.Seed(time.Now().UnixNano())
 	addr := fmt.Sprintf("%s:%d", host, port)
-	r := http_utils.NewRouter(routes)
+	r := http_utils.NewRouter(prefixPath, routes)
 	log.Infof("starting %s server in port %d...\n", serviceName, port)
 	log.Fatal(http.ListenAndServe(addr, r))
 }

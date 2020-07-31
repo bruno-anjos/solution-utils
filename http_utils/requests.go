@@ -28,7 +28,7 @@ func BuildRequest(method, host, path string, body interface{}) *http.Request {
 		var jsonStr []byte
 		jsonStr, err = json.Marshal(body)
 		if err != nil {
-			panic(errors.WithStack(err))
+			panic(err)
 		}
 		bodyBuffer = bytes.NewBuffer(jsonStr)
 	} else {
@@ -37,7 +37,7 @@ func BuildRequest(method, host, path string, body interface{}) *http.Request {
 
 	request, err = http.NewRequest(method, hostUrl.String(), bodyBuffer)
 	if err != nil {
-		panic(errors.WithStack(err))
+		panic(err)
 	}
 
 	request.Header.Set("Content-Type", "application/json")
@@ -54,24 +54,17 @@ func DoRequest(httpClient *http.Client, request *http.Request, responseBody inte
 
 	resp, err := httpClient.Do(request)
 	if err != nil {
-		panic(errors.WithStack(err))
+		panic(err)
 	}
 
 	if responseBody != nil {
 		err = json.NewDecoder(resp.Body).Decode(responseBody)
 		if err != nil {
-			panic(errors.WithStack(err))
+			panic(err)
 		}
 	}
 
 	return resp.StatusCode, resp
-}
-
-func DecodeJSONRequestBody(r *http.Request, body interface{}) {
-	err := json.NewDecoder(r.Body).Decode(&body)
-	if err != nil {
-		panic(errors.WithStack(err))
-	}
 }
 
 func ExtractPathVar(r *http.Request, varName string) (varValue string) {
@@ -82,7 +75,7 @@ func ExtractPathVar(r *http.Request, varName string) (varValue string) {
 
 	if !ok {
 		err := errors.Errorf("var %s was not in request path", varName)
-		panic(errors.WithStack(err))
+		panic(err)
 	}
 
 	return

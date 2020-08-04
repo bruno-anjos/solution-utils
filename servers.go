@@ -12,8 +12,8 @@ import (
 )
 
 const (
-	// DefaultInterface contains the default interface address
-	DefaultInterface = "0.0.0.0"
+	// LocalhostAddr contains the default interface address
+	LocalhostAddr = "127.0.0.1"
 )
 
 // StartServer seeds the random generator and starts a server on the
@@ -22,7 +22,7 @@ func StartServer(serviceName, hostPort string, port int, prefixPath string, rout
 	rand.Seed(time.Now().UnixNano())
 
 	debug := flag.Bool("d", false, "add debug logs")
-	listenAddr := flag.String("l", DefaultInterface, "address to listen on")
+	listenAddr := flag.String("l", LocalhostAddr, "address to listen on")
 	flag.Parse()
 
 	if *debug {

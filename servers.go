@@ -13,7 +13,7 @@ import (
 
 const (
 	// LocalhostAddr contains the default interface address
-	LocalhostAddr = "127.0.0.1"
+	LocalhostAddr = "0.0.0.0"
 )
 
 // StartServer seeds the random generator and starts a server on the

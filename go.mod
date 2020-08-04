@@ -9,5 +9,3 @@ require (
 	golang.org/x/sys v0.0.0-20200323222414-85ca7c5b95cd // indirect
 
 )
-
-replace github.com/bruno-anjos/archimedesHTTPClient v0.0.0-20200731165616-9aa4edba78b5 => ./../archimedesHTTPClient

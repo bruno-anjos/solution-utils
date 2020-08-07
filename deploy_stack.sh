@@ -1,9 +1,6 @@
 #!/bin/bash
 
-
-docker stop $(docker ps -a -q)
-docker rm $(docker ps -a -q)
-docker network rm scheduler-network
+bash $(dirname $0)/remove_stack.sh
 
 set -e
 

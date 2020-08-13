@@ -8,7 +8,7 @@ docker system prune -f
 docker network create scheduler-network
 
 cd archimedes || exit
-bash ../archimedes/build.sh
+bash build.sh
 cd ..
 
 cd scheduler || exit
@@ -20,8 +20,6 @@ bash build.sh
 cd ..
 
 docker run -d --network=scheduler-network --name=archimedes -p 50000:50000 brunoanjos/archimedes:latest
-sleep 5
-docker run -d --network=scheduler-network --name=archimedes2 -p 50005:50000 brunoanjos/archimedes:latest
 sleep 2
 docker run -d --network=scheduler-network --name=scheduler -p 50001:50001 -v /var/run/docker.sock:/var/run/docker.sock brunoanjos/scheduler:latest
 sleep 2

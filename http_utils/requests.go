@@ -54,13 +54,13 @@ func DoRequest(httpClient *http.Client, request *http.Request, responseBody inte
 
 	resp, err := httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		log.Error(err)
 	}
 
 	if responseBody != nil {
 		err = json.NewDecoder(resp.Body).Decode(responseBody)
 		if err != nil {
-			panic(err)
+			log.Error(err)
 		}
 	}
 

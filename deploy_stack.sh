@@ -16,7 +16,7 @@ function build() {
 
 function run() {
 	docker run -d --network=scheduler-network --name=$SERVICE_NAME -p $PORT:$PORT \
-	$OPTIONS brunoanjos/$SERVICE_NAME:latest
+	$OPTIONS --hostname "$HOSTNAME" brunoanjos/$SERVICE_NAME:latest
 }
 
 function deploy() {

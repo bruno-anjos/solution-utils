@@ -38,6 +38,7 @@ deploy &
 
 SERVICE_NAME="deployer"
 PORT="50002"
+OPTIONS=""
 deploy &
 
 wait

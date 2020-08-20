@@ -38,7 +38,8 @@ deploy &
 
 SERVICE_NAME="deployer"
 PORT="50002"
-OPTIONS=""
+ALTERNATIVES_FILE="$(pwd)/deployer/alternatives.txt"
+OPTIONS="--mount type=bind,source=$ALTERNATIVES_FILE,target=alternatives.txt"
 deploy &
 
 wait

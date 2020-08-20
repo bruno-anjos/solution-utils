@@ -4,23 +4,38 @@ bash $(dirname $0)/remove_stack.sh
 
 set -e
 
+SERVICE_NAME=""
+OPTIONS=""
+PORT=""
+
+function build() {
+	cd $SERVICE_NAME || exit
+	bash build.sh
+	cd ..
+}
+
+function run() {
+	docker run -d --network=scheduler-network --name=$SERVICE_NAME -p $PORT:$PORT \
+	$OPTIONS brunoanjos/$SERVICE_NAME:latest
+}
+
+function deploy() {
+	build
+	run
+}
+
 docker system prune -f
 docker network create scheduler-network
 
-cd archimedes || exit
-bash build.sh
-cd ..
+SERVICE_NAME="archimedes"
+PORT="50000"
+deploy &
 
-cd scheduler || exit
-bash build.sh
-cd ..
+SERVICE_NAME="scheduler"
+PORT="50001"
+OPTIONS="-v /var/run/docker.sock:/var/run/docker.sock"
+deploy &
 
-cd deployer || exit
-bash build.sh
-cd ..
-
-docker run -d --network=scheduler-network --name=archimedes -p 50000:50000 brunoanjos/archimedes:latest
-sleep 2
-docker run -d --network=scheduler-network --name=scheduler -p 50001:50001 -v /var/run/docker.sock:/var/run/docker.sock brunoanjos/scheduler:latest
-sleep 2
-docker run -d --network=scheduler-network --name=deployer -p 50002:50002 brunoanjos/deployer:latest
+SERVICE_NAME="deployer"
+PORT="50002"
+deploy &

@@ -9,3 +9,8 @@ const (
 	TCP string = "tcp"
 	UDP string = "udp"
 )
+
+type Node struct {
+	Id   string
+	Addr string
+}

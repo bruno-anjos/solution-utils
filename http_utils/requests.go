@@ -54,7 +54,8 @@ func DoRequest(httpClient *http.Client, request *http.Request, responseBody inte
 
 	resp, err := httpClient.Do(request)
 	if err != nil {
-		panic(err)
+		log.Errorf("error while making request: %+v", err)
+		return -1, nil
 	}
 
 	if responseBody != nil {
